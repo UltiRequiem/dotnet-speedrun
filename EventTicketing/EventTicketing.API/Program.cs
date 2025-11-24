@@ -38,6 +38,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
+
+// Serve static files (HTML, CSS, JS)
+app.UseDefaultFiles(); // Serves index.html by default
+app.UseStaticFiles();
+
 app.UseAuthorization();
 app.MapControllers();
 

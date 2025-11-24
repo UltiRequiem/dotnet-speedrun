@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Ticketing Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body
+    class="bg-gradient-to-br from-purple-600 to-purple-900 min-h-screen p-6"
+  >
+    <div class="max-w-7xl mx-auto">
+      <header class="text-center text-white mb-10">
+        <h1 class="text-5xl font-bold mb-3">Event Ticketing System</h1>
+        <p class="text-xl opacity-90">Clean Architecture Demo</p>
+      </header>
+
+      <main class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Events Section -->
+        <section class="bg-white rounded-xl shadow-2xl p-8">
+          <h2 class="text-3xl font-bold text-gray-800 mb-6">Events</h2>
+          <button
+            id="createEventBtn"
+            class="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition-all hover:-translate-y-1 mb-6"
+          >
+            Create New Event
+          </button>
+
+          <div id="eventsList" class="space-y-4">
+            <p class="text-center text-gray-500 py-10">Loading events...</p>
+          </div>
+        </section>
+
+        <!-- Tickets Section -->
+        <section class="bg-white rounded-xl shadow-2xl p-8">
+          <h2 class="text-3xl font-bold text-gray-800 mb-6">Tickets</h2>
+          <button
+            id="createTicketBtn"
+            class="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition-all hover:-translate-y-1 mb-6"
+          >
+            Purchase Ticket
+          </button>
+
+          <div id="ticketsList" class="space-y-4">
+            <p class="text-center text-gray-500 py-10">Loading tickets...</p>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Create Event Modal -->
+    <div
+      id="eventModal"
+      class="hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-4"
+    >
+      <div
+        class="bg-white rounded-xl shadow-2xl w-full max-w-2xl p-8 animate-fade-in"
+      >
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-3xl font-bold text-gray-800">Create New Event</h2>
+          <button
+            class="close text-gray-400 hover:text-red-500 text-4xl font-bold"
+          >
+            &times;
+          </button>
+        </div>
+        <form id="eventForm" class="space-y-5">
+          <div>
+            <label class="block text-gray-700 font-semibold mb-2"
+            >Event Name *</label>
+            <input
+              type="text"
+              id="eventName"
+              required
+              class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-600 focus:outline-none transition"
+            >
+          </div>
+          <div>
+            <label class="block text-gray-700 font-semibold mb-2"
+            >Description</label>
+            <textarea
+              id="eventDescription"
+              rows="3"
+              class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-600 focus:outline-none transition"
+            ></textarea>
+          </div>
+          <div>
+            <label class="block text-gray-700 font-semibold mb-2"
+            >Event Date *</label>
+            <input
+              type="datetime-local"
+              id="eventDate"
+              required
+              class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-600 focus:outline-none transition"
+            >
+          </div>
+          <div>
+            <label class="block text-gray-700 font-semibold mb-2"
+            >Location *</label>
+            <input
+              type="text"
+              id="eventLocation"
+              required
+              class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-600 focus:outline-none transition"
+            >
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-gray-700 font-semibold mb-2"
+              >Total Seats *</label>
+              <input
+                type="number"
+                id="totalSeats"
+                min="1"
+                required
+                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-600 focus:outline-none transition"
+              >
+            </div>
+            <div>
+              <label class="block text-gray-700 font-semibold mb-2"
+              >Base Price *</label>
+              <input
+                type="number"
+                id="basePrice"
+                min="0"
+                step="0.01"
+                required
+                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-600 focus:outline-none transition"
+              >
+            </div>
+          </div>
+          <button
+            type="submit"
+            class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition"
+          >
+            Create Event
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Create Ticket Modal -->
+    <div
+      id="ticketModal"
+      class="hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-4"
+    >
+      <div
+        class="bg-white rounded-xl shadow-2xl w-full max-w-2xl p-8 animate-fade-in"
+      >
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-3xl font-bold text-gray-800">Purchase Ticket</h2>
+          <button
+            class="close text-gray-400 hover:text-red-500 text-4xl font-bold"
+          >
+            &times;
+          </button>
+        </div>
+        <form id="ticketForm" class="space-y-5">
+          <div>
+            <label class="block text-gray-700 font-semibold mb-2"
+            >Select Event *</label>
+            <select
+              id="ticketEvent"
+              required
+              class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-600 focus:outline-none transition"
+            >
+              <option value="">Loading events...</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-gray-700 font-semibold mb-2"
+            >Full Name *</label>
+            <input
+              type="text"
+              id="attendeeName"
+              required
+              class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-600 focus:outline-none transition"
+            >
+          </div>
+          <div>
+            <label class="block text-gray-700 font-semibold mb-2"
+            >Email *</label>
+            <input
+              type="email"
+              id="attendeeEmail"
+              required
+              class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-600 focus:outline-none transition"
+            >
+          </div>
+          <div>
+            <label class="block text-gray-700 font-semibold mb-2"
+            >Seat Number *</label>
+            <input
+              type="text"
+              id="seatNumber"
+              required
+              class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-600 focus:outline-none transition"
+            >
+          </div>
+          <div>
+            <label class="block text-gray-700 font-semibold mb-2"
+            >Price Paid *</label>
+            <input
+              type="number"
+              id="pricePaid"
+              min="0"
+              step="0.01"
+              required
+              class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-purple-600 focus:outline-none transition"
+            >
+          </div>
+          <button
+            type="submit"
+            class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition"
+          >
+            Purchase Ticket
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

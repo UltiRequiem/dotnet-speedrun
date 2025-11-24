@@ -1,3 +1,4 @@
+using EventTicketing.API.DTOs;
 using EventTicketing.Application.Interfaces;
 using EventTicketing.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -61,7 +62,7 @@ public class TicketsController(
 
   // POST: api/tickets
   [HttpPost]
-  public async Task<ActionResult<Ticket>> CreateTicket(Ticket ticket)
+  public async Task<ActionResult<Ticket>> CreateTicket(CreateTicketDto ticketDto)
   {
     if (!ModelState.IsValid)
     {
@@ -69,11 +70,23 @@ public class TicketsController(
     }
 
     // Validate event exists
-    var eventExists = await _eventRepository.ExistsAsync(ticket.EventId);
+    var eventExists = await _eventRepository.ExistsAsync(ticketDto.EventId);
     if (!eventExists)
     {
-      return BadRequest(new { message = $"Event with ID {ticket.EventId} not found" });
+      return BadRequest(new { message = $"Event with ID {ticketDto.EventId} not found" });
     }
+
+    // Map DTO to entity
+    var ticket = new Ticket
+    {
+      EventId = ticketDto.EventId,
+      AttendeeEmail = ticketDto.AttendeeEmail,
+      AttendeeFullName = ticketDto.AttendeeFullName,
+      SeatNumber = ticketDto.SeatNumber,
+      PricePaid = ticketDto.PricePaid,
+      Status = (TicketStatus)ticketDto.Status,
+      PurchasedAt = ticketDto.PurchasedAt
+    };
 
     var createdTicket = await _ticketRepository.CreateAsync(ticket);
 
