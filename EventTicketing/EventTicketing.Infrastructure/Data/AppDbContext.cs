@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EventTicketing.Infrastructure.Data;
 
-public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options), DbContext
+public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
   public DbSet<Event> Events { get; set; }
   public DbSet<Ticket> Tickets { get; set; }
