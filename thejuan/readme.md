@@ -1,0 +1,3 @@
+# When life gives you...
+
+A console Application.
